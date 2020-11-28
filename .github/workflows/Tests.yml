@@ -44,6 +44,8 @@ jobs:
 
       - name: Unit Tests without coverage
         if: matrix.typo3 != '^9.5'
+        with:
+          coverage: "none"
         run: |
           export "UNIT_XML"=.Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml
           .Build/bin/phpunit --colors -c $UNIT_XML Tests/Unit
@@ -59,6 +61,8 @@ jobs:
           export "FUNCTIONAL_XML"=.Build/vendor/nimut/testing-framework/res/Configuration/FunctionalTests.xml
           .Build/bin/phpunit --whitelist Classes --colors -c $FUNCTIONAL_XML Tests/Functional
         if: matrix.typo3 != '^9.5'
+        with:
+          coverage: "none"
         env:
           typo3DatabaseHost: 127.0.0.1
           typo3DatabaseName: typo3
