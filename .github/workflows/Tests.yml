@@ -12,9 +12,22 @@ jobs:
         typo3: [ ^9.5, ^10.4 ]
         php: [ '7.2', '7.4' ]
 
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: typo3
+        ports:
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        #tmpfs:
+        #  - /var/lib/mysql/:rw,noexec,nosuid
+
+
     steps:
-      - name: Start database server
-        run: sudo /etc/init.d/mysql start
+      #- name: Start database server
+      #  run: sudo /etc/init.d/mysql start
 
       - name: Checkout
         uses: actions/checkout@v2
