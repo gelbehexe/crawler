@@ -14,7 +14,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: typo3
@@ -42,6 +42,7 @@ jobs:
         run: |
           php --version
           composer --version
+          docker ps
 
       - name: Validate composer.json and composer.lock
         run: composer validate
@@ -58,7 +59,6 @@ jobs:
       - name: Unit Tests without coverage
         if: matrix.typo3 != '^9.5'
         run: |
-          phpenv config-rm xdebug.ini || return 0
           export "UNIT_XML"=.Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml
           .Build/bin/phpunit --colors -c $UNIT_XML Tests/Unit
 
@@ -70,7 +70,6 @@ jobs:
 
       - name: Functional Tests without coverage
         run: |
-          phpenv config-rm xdebug.ini || return 0
           export "FUNCTIONAL_XML"=.Build/vendor/nimut/testing-framework/res/Configuration/FunctionalTests.xml
           .Build/bin/phpunit --whitelist Classes --colors -c $FUNCTIONAL_XML Tests/Functional
         if: matrix.typo3 != '^9.5'
